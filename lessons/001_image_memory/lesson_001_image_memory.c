@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 
 typedef struct
@@ -11,7 +12,43 @@ typedef struct
 
 int main()
 {
+    /* Check available memory */
+    printf("%d\n", getpid());
+
+      getchar();
+
+    char stack_array_1024[1024];
+    char stack_array_1[1];
+
+    char* heap_array_0 = malloc(0);
+    char* heap_array_1 = malloc(1);
+    char* heap_array_1024 = malloc(1024);
+
+    printf("Stack Array [1024] = %p\n", stack_array_1024);
+    printf("Stack Array [1]    = %p\n", stack_array_1);
+
+    printf("Heap Array malloc(0)    = %p\n", heap_array_0);
+    printf("Heap Array malloc(1)    = %p\n", heap_array_1);
+    printf("Heap Array malloc(1024) = %p\n", heap_array_1024);
+
+    printf("sizeof(stack_array_1) = %zu\n",
+       sizeof(stack_array_1));
+
+    printf("sizeof(stack_array_1024) = %zu\n",
+       sizeof(stack_array_1024));
+
+    free(heap_array_0);
+    free(heap_array_1);
+    free(heap_array_1024);
     
+
+
+
+
+
+
+
+
     Image img = { .width = 640, .height = 480, .data = NULL };
     printf("Image width: %d, height: %d\n", img.width, img.height);
 
