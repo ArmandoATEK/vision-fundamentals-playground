@@ -1,28 +1,76 @@
 # Vision Fundamentals Playground
 
-A hands-on machine vision playground built in C to explore image processing fundamentals from first principles.
+A hands-on exploration of machine vision and image processing fundamentals using C.
 
-The purpose of this project is to develop a deep understanding of how images are represented, manipulated, and analysed at the lowest level.
+This repository documents a journey into understanding computer vision from first principles by exploring how images are represented, manipulated, and analysed at the lowest level.
 
-Rather than relying on pre-exisitng vision frameworks, we will progressively build fundamental image processing algorithms from scratch, including thresholding, connected components, edge detection, shape matching, and feature extraction.
+The goal is not to recreate existing vision libraries or production frameworks. Instead, the focus is on developing intuition through experimentation, visualisation, and practical implementation of core concepts.
+
+> An image is not a picture. An image is a block of memory containing numbers.
 
 ---
 
 # Why This Project Exists
 
-Modern machine vision frameworks make it easy to solve problems quickly.
+Modern machine vision tools make it possible to solve complex problems very quickly. While this is extremely powerful, it can sometimes hide the underlying concepts that make those solutions possible.
 
-However, many engineers never develop an intuitive understanding of what is happening beneath the abstraction layers.
-
-This project aims to bridge that gap by exploring machine vision fundamentals from the ground up.
-
-The objective is to understand:
+This project is a personal learning playground designed to explore:
 
 * How images are stored in memory
-* How pixels are represented
-* How image processing operators work internally
-* How machine vision algorithms are built
-* How industrial vision systems ultimately make decisions
+* How pixels are represented and manipulated
+* How image processing algorithms operate
+* How features are extracted from images
+* How machine vision systems ultimately make decisions
+
+The objective is to develop a deeper understanding of image processing fundamentals through practical experimentation and implementation.
+
+---
+
+# Learning Philosophy
+
+This repository is intentionally focused on learning and curiosity.
+
+The emphasis is on:
+
+* Building intuition
+* Understanding fundamentals
+* Visualising intermediate results
+* Exploring concepts through experimentation
+* Documenting lessons learned
+
+The project is not intended to become a production vision framework.
+
+---
+
+# Repository Structure
+
+```text
+vision-fundamentals-playground/
+│
+├── README.md
+├── Makefile
+│
+├── src/
+│   ├── main.c
+│   ├── image.c
+│   ├── image.h
+│   ├── pgm.c
+│   └── pgm.h
+│
+├── lessons/
+│   └── 001_image_memory/
+│       ├── README.md
+│       └── lesson_001_image_memory.c
+│
+├── notes/
+│   └── 001_images_are_memory.md
+│
+├── images/
+│
+├── output/
+│
+└── build/
+```
 
 ---
 
@@ -32,15 +80,15 @@ The objective is to understand:
 
 Topics:
 
+* Structures
 * Stack memory
 * Heap memory
-* Structures
 * Pointers
 * Image metadata
 * Pixel buffers
 * Memory layout
 
-Status: In Progress
+Status: Complete
 
 ---
 
@@ -51,7 +99,7 @@ Topics:
 * Black images
 * White images
 * Gradients
-* Drawing primitives
+* Geometric primitives
 * Coordinate systems
 
 Status: Planned
@@ -64,7 +112,7 @@ Topics:
 
 * Binary segmentation
 * Pixel classification
-* Building HALCON's threshold() operator
+* Threshold operations
 
 Status: Planned
 
@@ -74,9 +122,9 @@ Status: Planned
 
 Topics:
 
-* Blob analysis
 * Flood fill
 * Region labelling
+* Blob analysis
 * Connected component extraction
 
 Status: Planned
@@ -109,213 +157,54 @@ Status: Planned
 
 ---
 
-## Lesson 007 – Shape Matching
+## Lesson 007 – Shape Representation
 
 Topics:
 
-* Correlation
-* Template matching
-* Rotation invariance
-* Industrial applications
+* Contours
+* Boundaries
+* Moments
+* Shape descriptors
 
 Status: Planned
 
 ---
 
-# Lesson 001 – Images Are Memory
+## Lesson 008 – Template Matching
 
-## Core Idea
+Topics:
 
-An image is not a picture.
+* Correlation
+* Similarity measures
+* Search strategies
+* Pattern matching
 
-An image is a block of memory together with metadata that describes how that memory should be interpreted.
-
-A grayscale image can be represented by three fundamental pieces of information:
-
-```c
-typedef struct
-{
-    int width;
-    int height;
-    unsigned char* data;
-} Image;
-```
-
-Where:
-
-* width = number of pixels per row
-* height = number of rows
-* data = pointer to the first pixel in memory
+Status: Planned
 
 ---
 
-## Metadata vs Pixel Data
+## Lesson 009 – Feature Extraction
 
-The Image structure stores metadata only.
+Topics:
 
-```text
-Image
-├── Width
-├── Height
-└── Data Pointer
-```
+* Local features
+* Texture features
+* Shape features
+* Statistical descriptors
 
-The actual pixel data is stored elsewhere in memory.
-
-The data pointer simply stores the address of the first pixel.
+Status: Planned
 
 ---
 
-## Stack Memory
+## Lesson 010 – Foundations of Machine Learning
 
-Creating an image structure:
+Topics:
 
-```c
-Image img;
-```
+* Feature vectors
+* Classification
+* Training data
+* Decision boundaries
 
-allocates memory on the stack.
-
-Example addresses:
-
-```text
-img address        = 0x16fdfef00
-img.width address  = 0x16fdfef00
-img.height address = 0x16fdfef04
-img.data address   = 0x16fdfef08
-```
-
-This demonstrates how the structure members are laid out sequentially in memory.
-
-The Image structure itself occupies only a small amount of memory.
-
-It does not contain the actual image pixels.
+Status: Planned
 
 ---
-
-## Heap Memory
-
-Pixel memory is typically allocated on the heap:
-
-```c
-img.data = malloc(img.width * img.height);
-```
-
-For a 640 × 480 image:
-
-```text
-640 × 480 = 307,200 pixels
-```
-
-Since each grayscale pixel occupies one byte:
-
-```text
-307,200 bytes
-```
-
-must be allocated.
-
-The address of the first pixel is then stored in:
-
-```c
-img.data
-```
-
----
-
-## Visualising Memory
-
-Before allocation:
-
-```text
-Stack
-
-Image
-├── width
-├── height
-└── data = NULL
-```
-
-After allocation:
-
-```text
-Stack
-
-Image
-├── width = 640
-├── height = 480
-└── data = 0x5000
-
-Heap
-
-0x5000 -> Pixel 0
-0x5001 -> Pixel 1
-0x5002 -> Pixel 2
-...
-```
-
-The Image structure stores information about the image.
-
-The heap stores the actual image.
-
----
-
-## Pixel Addressing
-
-Images are stored as a one-dimensional block of memory.
-
-A pixel coordinate:
-
-```text
-x = 100
-y = 50
-```
-
-is converted to a memory location using:
-
-```c
-index = y * width + x;
-```
-
-Example:
-
-```c
-unsigned char pixel =
-    img.data[y * img.width + x];
-```
-
-This is how individual pixels are accessed.
-
----
-
-## What HALCON Does
-
-HALCON hides these implementation details.
-
-When an image is loaded:
-
-```hdevelop
-read_image(Image, 'test.png')
-```
-
-HALCON internally manages:
-
-* Image metadata
-* Memory allocation
-* Pixel storage
-* Reference counting
-* Object lifetime
-
-The HObject acts as a handle to an internal image representation.
-
----
-
-## Key Takeaway
-
-One of the most important concepts in machine vision is:
-
-> An image is not a picture. An image is a block of memory containing numbers.
-
-Everything else in machine vision — thresholding, blob analysis, edge detection, shape matching, feature extraction, and AI — is built upon this foundation.
-
-Understanding image memory is the first step toward understanding how computer vision systems actually work.
