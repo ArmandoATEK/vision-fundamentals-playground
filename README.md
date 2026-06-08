@@ -4,7 +4,7 @@ A hands-on machine vision playground built in C to explore image processing fund
 
 The purpose of this project is to develop a deep understanding of how images are represented, manipulated, and analysed at the lowest level.
 
-Rather than relying on frameworks such as HALCON or OpenCV, we will progressively build fundamental image processing algorithms from scratch, including thresholding, connected components, edge detection, shape matching, and feature extraction.
+Rather than relying on pre-exisitng vision frameworks, we will progressively build fundamental image processing algorithms from scratch, including thresholding, connected components, edge detection, shape matching, and feature extraction.
 
 ---
 
